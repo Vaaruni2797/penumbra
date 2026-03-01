@@ -25,21 +25,13 @@ Every AI model outputs answers with the same confident tone — whether it's cer
 
 ## 🧠 How It Works
 
-```
-Public Datasets          Mistral Large 3
-(TruthfulQA,         →   annotates each QA    →   Finetuning data
- TriviaQA, FEVER)         with uncertainty maps
-
-                    QLoRA Finetuning
-                    Ministral 8B learns to
-                    ALWAYS output structured
-                    uncertainty map alongside answer
-
-                    Streamlit Demo
-                    Side-by-side: base vs
-                    finetuned — judges see
-                    the difference instantly
-```
+| Step | What happens |
+|---|---|
+| 1️⃣ **Collect** | Pull TruthfulQA, TriviaQA, FEVER — datasets with known uncertainty levels |
+| 2️⃣ **Annotate** | Mistral Large 3 decomposes each answer into claims and assigns confidence scores |
+| 3️⃣ **Generate** | Synthetic QA pairs created across high / medium / low certainty domains |
+| 4️⃣ **Finetune** | Ministral 8B trained via QLoRA to always output structured uncertainty maps |
+| 5️⃣ **Demo** | Side-by-side: base model gives confident prose, Penumbra maps the uncertainty |
 
 ---
 
