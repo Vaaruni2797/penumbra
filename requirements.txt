@@ -1,0 +1,17 @@
+mistralai>=1.0.0
+datasets>=2.14.0
+transformers>=4.40.0
+peft>=0.10.0
+trl>=0.8.0
+bitsandbytes>=0.43.0
+accelerate>=0.27.0
+torch>=2.2.0
+wandb>=0.16.0
+streamlit>=1.32.0
+plotly>=5.20.0
+pandas>=2.0.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+python-dotenv>=1.0.0
+jsonlines>=4.0.0
+tqdm>=4.66.0

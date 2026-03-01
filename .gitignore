@@ -1,0 +1,38 @@
+# Environment
+.env
+
+# Model weights — too large, lives on HuggingFace Hub
+models/
+hf-space/
+
+# Training data — regeneratable
+data/raw/
+data/synthetic/
+data/processed/
+
+# Results
+results/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# W&B
+wandb/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
