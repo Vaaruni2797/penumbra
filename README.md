@@ -1,4 +1,4 @@
-# 🌒 Penumbra
+# 🌔 Penumbra
 
 > Between knowing and guessing, there's a shadow. Penumbra makes it visible.
 
@@ -15,9 +15,9 @@ Every AI model outputs answers with the same confident tone — whether it's cer
 *Everything sounds equally certain. Nothing tells you what to trust.*
 
 **Penumbra:**
-- Subprime lending as trigger: 🟣 95% confident (overwhelming evidence)
-- Deregulation as direct cause: 🔵 61% confident (economists debate causality vs correlation)
-- CDOs as primary mechanism: 🔵 73% confident (strong evidence, alternatives exist)
+- Subprime lending as trigger: 🟡 95% confident (overwhelming evidence)
+- Deregulation as direct cause: 🟣 61% confident (economists debate causality vs correlation)
+- CDOs as primary mechanism: 🟣 73% confident (strong evidence, alternatives exist)
 
 *Now you know exactly what to trust and what to verify.*
 
@@ -177,4 +177,4 @@ penumbra/
 
 ---
 
-Built for the Mistral Hackathon 2026. 🌒
+Built for the Mistral Hackathon 2026. 🌔
