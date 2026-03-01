@@ -20,11 +20,6 @@ client = Mistral(api_key=os.getenv("MISTRAL_API_KEY"))
 RAW_DIR = Path("data/raw")
 SYNTHETIC_DIR = Path("data/synthetic")
 SYNTHETIC_DIR.mkdir(parents=True, exist_ok=True)
-
-# ─────────────────────────────────────────────
-# The core prompt: teaches Large 3 to produce
-# structured uncertainty maps
-# ─────────────────────────────────────────────
 ANNOTATION_PROMPT = """You are an expert at epistemic analysis.
 
 Given a question and its correct answer, decompose the answer into 
@@ -66,10 +61,6 @@ Return ONLY valid JSON in exactly this format:
 
 
 def annotate_qa_pair(question: str, answer: str, retries: int = 3) -> dict:
-    """
-    Use Mistral Large 3 to annotate a single QA pair
-    with a structured uncertainty map.
-    """
     prompt = ANNOTATION_PROMPT.format(
         question=question,
         answer=answer
@@ -81,7 +72,7 @@ def annotate_qa_pair(question: str, answer: str, retries: int = 3) -> dict:
                 model="mistral-large-latest",
                 messages=[{"role": "user", "content": prompt}],
                 response_format={"type": "json_object"},
-                temperature=0.1  # Low temp for consistent annotation
+                temperature=0.1
             )
 
             result = json.loads(response.choices[0].message.content)
@@ -89,14 +80,13 @@ def annotate_qa_pair(question: str, answer: str, retries: int = 3) -> dict:
 
         except Exception as e:
             if attempt < retries - 1:
-                time.sleep(2 ** attempt)  # Exponential backoff
+                time.sleep(2 ** attempt)
                 continue
             print(f"  Failed to annotate after {retries} attempts: {e}")
             return None
 
 
 def annotate_truthfulqa():
-    """Annotate TruthfulQA examples."""
     print("Annotating TruthfulQA...")
     path = RAW_DIR / "truthfulqa.jsonl"
 
@@ -108,11 +98,10 @@ def annotate_truthfulqa():
         raw = [json.loads(line) for line in f]
 
     annotated = []
-    for item in tqdm(raw[:200]):  # Start with 200 for speed
+    for item in tqdm(raw[:200]):
         if not item["correct_answers"]:
             continue
 
-        # Use first correct answer
         answer = item["correct_answers"][0]
         result = annotate_qa_pair(item["question"], answer)
 
@@ -124,13 +113,11 @@ def annotate_truthfulqa():
                 "expected_uncertainty_level": item["expected_uncertainty"]
             })
 
-        time.sleep(0.5)  # Rate limiting
-
+        time.sleep(0.5)
     return annotated
 
 
 def annotate_triviaqa():
-    """Annotate TriviaQA examples."""
     print("Annotating TriviaQA...")
     path = RAW_DIR / "triviaqa.jsonl"
 
@@ -160,7 +147,6 @@ def annotate_triviaqa():
 
     return annotated
 
-
 def save_annotated(annotated: list, filename: str):
     path = SYNTHETIC_DIR / filename
     with open(path, "w") as f:
@@ -184,9 +170,8 @@ def annotate_all():
     save_annotated(triviaqa_annotated, "triviaqa_annotated.jsonl")
     all_annotated.extend(triviaqa_annotated)
 
-    # Save combined
     save_annotated(all_annotated, "all_annotated.jsonl")
-    print(f"\n✅ Total annotated: {len(all_annotated)} examples")
+    print(f"\nTotal annotated: {len(all_annotated)} examples")
     return all_annotated
 
 

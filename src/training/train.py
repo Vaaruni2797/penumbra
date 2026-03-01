@@ -36,7 +36,6 @@ def load_dataset_from_jsonl(path: Path) -> Dataset:
 
 
 def format_messages(example: dict) -> dict:
-    """Format messages list into a single text string."""
     messages = example["messages"]
     text = ""
     for msg in messages:
@@ -50,7 +49,6 @@ def format_messages(example: dict) -> dict:
 
 
 def setup_model_and_tokenizer():
-    """Load model with 4-bit QLoRA quantization."""
     print(f"Loading {model_config.model_id}...")
 
     bnb_config = BitsAndBytesConfig(
@@ -112,7 +110,6 @@ def train():
     print("FINETUNING PENUMBRA")
     print("=" * 50)
 
-    # Load and format datasets
     print("\nLoading datasets...")
     train_dataset = load_dataset_from_jsonl(DATA_DIR / "train.jsonl")
     val_dataset = load_dataset_from_jsonl(DATA_DIR / "val.jsonl")
@@ -121,11 +118,9 @@ def train():
     train_dataset = train_dataset.map(format_messages)
     val_dataset = val_dataset.map(format_messages)
 
-    # Load model and peft config
     model, tokenizer = setup_model_and_tokenizer()
     peft_config = build_peft_config()
 
-    # SFTConfig — exact parameter names from docs
     sft_config = SFTConfig(
         # Output
         output_dir=model_config.output_dir,
@@ -179,7 +174,7 @@ def train():
     tokenizer.save_pretrained(model_config.output_dir)
 
     wandb.finish()
-    print("\n✅ Penumbra training complete!")
+    print("\nPenumbra training complete!")
 
 
 if __name__ == "__main__":

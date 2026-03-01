@@ -26,11 +26,10 @@ class ModelConfig:
 @dataclass  
 class LoraConfig:
     # QLoRA parameters
-    r: int = 4                     # Rank — lower for faster training
-    lora_alpha: int = 8            # Scaling factor (2x rank)
+    r: int = 4
+    lora_alpha: int = 8
     lora_dropout: float = 0.05
     
-    # Target modules for Mistral architecture
     target_modules: list = None
     
     def __post_init__(self):
@@ -49,7 +48,7 @@ class TrainingConfig:
     # Batch size — adjust based on GPU memory
     per_device_train_batch_size: int = 1
     per_device_eval_batch_size: int = 1
-    gradient_accumulation_steps: int = 16  # Effective batch = 16
+    gradient_accumulation_steps: int = 16
     
     # Optimizer — 8-bit for memory efficiency
     optim: str = "paged_adamw_8bit"

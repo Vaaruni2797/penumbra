@@ -161,7 +161,6 @@ Built for the Mistral Hackathon 2026. 🌒
 
 
 def upload_adapter_weights():
-    """Upload QLoRA adapter weights to HuggingFace Hub."""
 
     api = HfApi(token=os.getenv("HF_TOKEN"))
 
@@ -173,11 +172,10 @@ def upload_adapter_weights():
             private=False,
             exist_ok=True
         )
-        print(f"  ✅ Repo ready: https://huggingface.co/{REPO_ID}")
+        print(f"  Repo ready: https://huggingface.co/{REPO_ID}")
     except Exception as e:
         print(f"  Repo may already exist: {e}")
 
-    # Upload adapter files
     print("\nUploading adapter weights...")
     adapter_files = [
         "adapter_config.json",
@@ -197,11 +195,10 @@ def upload_adapter_weights():
                 repo_id=REPO_ID,
                 token=os.getenv("HF_TOKEN")
             )
-            print(f"  ✅ Uploaded {filename}")
+            print(f"  Uploaded {filename}")
         else:
-            print(f"  ⚠️  Skipped {filename} (not found)")
+            print(f"  Skipped {filename} (not found)")
 
-    # Upload model card
     print("\nUploading model card...")
     api.upload_file(
         path_or_fileobj=MODEL_CARD.encode(),
@@ -209,9 +206,8 @@ def upload_adapter_weights():
         repo_id=REPO_ID,
         token=os.getenv("HF_TOKEN")
     )
-    print("  ✅ Model card uploaded")
+    print("  Model card uploaded")
 
-    # Upload training config
     config_data = {
         "base_model": "mistralai/Ministral-8B-Instruct-2410",
         "method": "QLoRA",
@@ -230,7 +226,7 @@ def upload_adapter_weights():
         repo_id=REPO_ID,
         token=os.getenv("HF_TOKEN")
     )
-    print("  ✅ Training config uploaded")
+    print("  Training config uploaded")
 
     print(f"\n🌒 Penumbra is live!")
     print(f"   Model: https://huggingface.co/{REPO_ID}")
@@ -240,7 +236,6 @@ def upload_adapter_weights():
 
 
 def verify_upload():
-    """Sanity check — load model from Hub and run inference."""
     print("\nVerifying upload by loading from Hub...")
     try:
         base = AutoModelForCausalLM.from_pretrained(
@@ -273,7 +268,7 @@ When answering questions, respond ONLY with valid JSON containing answer, claims
             skip_special_tokens=True
         )
         result = json.loads(response)
-        print(f"  ✅ Model loads and runs correctly from Hub")
+        print(f"  Model loads and runs correctly from Hub")
         print(f"  overall_confidence: {result.get('overall_confidence')}")
         return True
 

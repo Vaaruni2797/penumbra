@@ -16,9 +16,6 @@ PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
 random.seed(42)
 
-# ─────────────────────────────────────────────
-# Mistral instruction format
-# ─────────────────────────────────────────────
 SYSTEM_PROMPT = """You are an epistemically transparent AI assistant.
 
 When answering questions, you ALWAYS provide:
@@ -29,15 +26,9 @@ Your uncertainty maps reveal exactly where you are certain vs guessing.
 You never hide uncertainty behind confident-sounding prose."""
 
 def format_as_instruction(question: str, uncertainty_map: dict) -> dict:
-    """
-    Format a QA pair into Mistral instruction tuning format.
-    
-    Input:  question text
-    Output: complete answer + uncertainty map JSON
-    """
+
     user_message = f"[INST] {question} [/INST]"
     
-    # Clean and validate uncertainty map
     output = {
         "answer": uncertainty_map.get("answer", ""),
         "claims": uncertainty_map.get("claims", []),
@@ -46,7 +37,6 @@ def format_as_instruction(question: str, uncertainty_map: dict) -> dict:
         "epistemic_summary": uncertainty_map.get("epistemic_summary", "")
     }
     
-    # Validate claims have required fields
     clean_claims = []
     for claim in output["claims"]:
         if all(k in claim for k in ["claim", "confidence", "basis"]):
@@ -72,10 +62,8 @@ def format_as_instruction(question: str, uncertainty_map: dict) -> dict:
 
 
 def load_all_data() -> list:
-    """Load all annotated and synthetic data."""
     all_data = []
     
-    # Load annotated real data
     annotated_path = SYNTHETIC_DIR / "all_annotated.jsonl"
     if annotated_path.exists():
         with open(annotated_path) as f:
@@ -111,11 +99,9 @@ def prepare_all():
     print("PREPARING TRAINING DATA")
     print("=" * 50)
     
-    # Load all data
     raw_data = load_all_data()
     print(f"\nTotal raw examples: {len(raw_data)}")
     
-    # Format as instruction tuning examples
     formatted = []
     skipped = 0
     
@@ -131,10 +117,8 @@ def prepare_all():
     
     print(f"Formatted: {len(formatted)} | Skipped: {skipped}")
     
-    # Shuffle
     random.shuffle(formatted)
     
-    # Split 80/10/10
     n = len(formatted)
     train_end = int(n * 0.8)
     val_end = int(n * 0.9)
@@ -145,7 +129,6 @@ def prepare_all():
         "test": formatted[val_end:]
     }
     
-    # Save splits
     for split_name, split_data in splits.items():
         path = PROCESSED_DIR / f"{split_name}.jsonl"
         with open(path, "w") as f:
@@ -153,7 +136,6 @@ def prepare_all():
                 f.write(json.dumps(item) + "\n")
         print(f"  {split_name}: {len(split_data)} examples → {path}")
     
-    # Save stats
     stats = {
         "total": len(formatted),
         "train": len(splits["train"]),
@@ -165,7 +147,7 @@ def prepare_all():
     with open(PROCESSED_DIR / "stats.json", "w") as f:
         json.dump(stats, f, indent=2)
     
-    print(f"\n✅ Data preparation complete")
+    print(f"\nData preparation complete")
     print(f"   Train: {stats['train']} | Val: {stats['val']} | Test: {stats['test']}")
     
     return splits

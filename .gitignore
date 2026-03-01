@@ -3,6 +3,7 @@
 
 # Model weights — too large, lives on HuggingFace Hub
 models/
+hf-space/
 
 # Training data — regeneratable
 data/raw/

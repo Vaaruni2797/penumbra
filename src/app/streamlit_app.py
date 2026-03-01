@@ -104,7 +104,6 @@ st.markdown("""
 
 
 def confidence_to_style(confidence: float):
-    """Map confidence to CSS class and emoji — purple gradient."""
     if confidence >= 0.7:
         return "high-conf", "🟣"
     elif confidence >= 0.4:

@@ -19,10 +19,6 @@ client = Mistral(api_key=os.getenv("MISTRAL_API_KEY"))
 SYNTHETIC_DIR = Path("data/synthetic")
 SYNTHETIC_DIR.mkdir(parents=True, exist_ok=True)
 
-
-# ─────────────────────────────────────────────
-# Domain templates for each uncertainty level
-# ─────────────────────────────────────────────
 DOMAIN_CONFIGS = {
     "high_confidence": {
         "domains": [
@@ -85,7 +81,6 @@ Return ONLY valid JSON in exactly this format, nothing else:
 
 
 def generate_single(level: str, domain: str) -> dict:
-    """Generate one QA pair for a domain."""
     config = DOMAIN_CONFIGS[level]
 
     try:
@@ -115,7 +110,6 @@ def generate_single(level: str, domain: str) -> dict:
 
 
 def generate_for_domain(level: str, domain: str, count: int) -> list:
-    """Generate `count` examples one at a time."""
     results = []
     for _ in range(count):
         example = generate_single(level, domain)

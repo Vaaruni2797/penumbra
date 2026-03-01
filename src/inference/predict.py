@@ -24,7 +24,6 @@ uncertainty map breaking down your confidence in each claim."""
 
 
 class UncertaintyMapPredictor:
-    """Wrapper for uncertainty map inference."""
     
     def __init__(self, use_local: bool = False, use_hub: bool = True):
         """
@@ -44,11 +43,6 @@ class UncertaintyMapPredictor:
             self._load_local_model()
 
     def _load_from_hub(self):
-        """
-        Load finetuned adapter from HuggingFace Hub.
-        This is how judges interact with the model —
-        no local training required.
-        """
         print(f"Loading Penumbra from HuggingFace Hub: {HF_REPO_ID}")
         try:
             base = AutoModelForCausalLM.from_pretrained(
@@ -73,7 +67,6 @@ class UncertaintyMapPredictor:
             self.use_hub = False
 
     def _load_local_model(self):
-        """Load finetuned Ministral 3B from local disk."""
         print("Loading local finetuned model...")
         base = AutoModelForCausalLM.from_pretrained(
             "mistralai/Ministral-3B-2410",
@@ -86,7 +79,6 @@ class UncertaintyMapPredictor:
         print("Model loaded.")
 
     def predict(self, question: str) -> dict:
-        """Generate uncertainty map for a question."""
         if self.model:
             return self._predict_local(question)
         else:
@@ -136,10 +128,6 @@ class UncertaintyMapPredictor:
             return {"error": "Parse failed", "raw": generated}
     
     def _predict_api(self, question: str) -> dict:
-        """
-        Fallback: Use Mistral API with few-shot prompting.
-        Used when local model isn't available (early demo).
-        """
         few_shot = """Example:
 Question: What is the boiling point of water?
 Response: {
@@ -182,7 +170,6 @@ Response: {
             return {"error": str(e)}
     
     def get_base_response(self, question: str) -> str:
-        """Get base model response (no uncertainty map) for comparison."""
         response = client.chat.complete(
             model="ministral-3b-2410",
             messages=[{"role": "user", "content": question}]
@@ -190,7 +177,6 @@ Response: {
         return response.choices[0].message.content
 
 
-# Singleton for Streamlit
 _predictor = None
 
 def get_predictor(use_local: bool = True, use_hub: bool = True) -> UncertaintyMapPredictor:

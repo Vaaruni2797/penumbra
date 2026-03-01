@@ -1,4 +1,3 @@
-# test_model.py — run from project root
 import json, torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel

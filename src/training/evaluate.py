@@ -31,7 +31,6 @@ RESULTS_DIR.mkdir(exist_ok=True)
 
 
 def load_finetuned_model():
-    """Load finetuned Ministral 3B."""
     print("Loading finetuned model...")
     base_model = AutoModelForCausalLM.from_pretrained(
         "mistralai/Ministral-8B-Instruct-2410",
@@ -46,7 +45,6 @@ def load_finetuned_model():
 def generate_uncertainty_map(
     model, tokenizer, question: str, max_new_tokens: int = 1024
 ) -> dict:
-    """Generate uncertainty map from finetuned model."""
     prompt = f"<s>[INST] {question} [/INST]"
     
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
@@ -72,7 +70,6 @@ def generate_uncertainty_map(
 
 
 def generate_base_response(question: str) -> str:
-    """Get base Ministral 8B response (no uncertainty map)."""
     response = client.chat.complete(
         model="ministral-8b-latest",
         messages=[{"role": "user", "content": question}]
@@ -81,12 +78,6 @@ def generate_base_response(question: str) -> str:
 
 
 def calibration_analysis(test_data: list, model, tokenizer) -> dict:
-    """
-    Check if confidence scores are calibrated.
-    
-    If model says confidence=0.8, it should be correct ~80% of the time.
-    This is the money metric — Julien will ask for this.
-    """
     print("Running calibration analysis...")
     
     confidence_buckets = {
@@ -109,7 +100,6 @@ def calibration_analysis(test_data: list, model, tokenizer) -> dict:
         for claim in predicted["claims"]:
             conf = claim["confidence"]
             
-            # Map to bucket
             if conf < 0.2:
                 bucket = "0.0-0.2"
             elif conf < 0.4:
@@ -121,13 +111,11 @@ def calibration_analysis(test_data: list, model, tokenizer) -> dict:
             else:
                 bucket = "0.8-1.0"
             
-            # Compare with ground truth confidence
             gt_claims = {
                 c["claim"]: c["confidence"]
                 for c in ground_truth.get("claims", [])
             }
             
-            # Simple check: if predicted high confidence aligns with GT high confidence
             if claim["claim"] in gt_claims:
                 gt_conf = gt_claims[claim["claim"]]
                 is_correct = abs(conf - gt_conf) < 0.2
@@ -135,7 +123,6 @@ def calibration_analysis(test_data: list, model, tokenizer) -> dict:
                 if is_correct:
                     confidence_buckets[bucket]["correct"] += 1
     
-    # Calculate calibration
     calibration = {}
     for bucket, counts in confidence_buckets.items():
         if counts["total"] > 0:
@@ -149,10 +136,6 @@ def calibration_analysis(test_data: list, model, tokenizer) -> dict:
 
 
 def before_after_comparison(questions: list, model, tokenizer) -> list:
-    """
-    Generate side-by-side comparison of base vs finetuned.
-    This is the demo money shot.
-    """
     print("Generating before/after comparisons...")
     
     comparisons = []
@@ -174,7 +157,6 @@ def run_evaluation():
     print("EVALUATING UNCERTAINTY MAPS")
     print("=" * 50)
     
-    # Load test data
     test_data = []
     with open(PROCESSED_DIR / "test.jsonl") as f:
         for line in f:
@@ -182,10 +164,8 @@ def run_evaluation():
     test_data = test_data[:10]
     print(f"Test examples: {len(test_data)}")
     
-    # Load finetuned model
     model, tokenizer = load_finetuned_model()
     
-    # 1. Calibration analysis
     calibration = calibration_analysis(test_data, model, tokenizer)
     
     with open(RESULTS_DIR / "calibration.json", "w") as f:
@@ -195,7 +175,6 @@ def run_evaluation():
     for bucket, data in calibration.items():
         print(f"  {bucket}: {data['accuracy']:.2f} accuracy ({data['total']} claims)")
     
-    # 2. Before/after comparison on demo questions
     demo_questions = [
         "What caused the 2008 financial crisis?",
         "Is coffee good or bad for your health?",
@@ -212,13 +191,11 @@ def run_evaluation():
     with open(RESULTS_DIR / "before_after.json", "w") as f:
         json.dump(comparisons, f, indent=2)
     
-    # 3. Log to W&B
     wandb.init(
         project=os.getenv("WANDB_PROJECT", "penumbra"),
         name="evaluation"
     )
     
-    # Log calibration as table
     cal_data = [
         [bucket, data["accuracy"], data["total"]]
         for bucket, data in calibration.items()
@@ -231,7 +208,7 @@ def run_evaluation():
     })
     
     wandb.finish()
-    print(f"\n✅ Evaluation complete. Results in {RESULTS_DIR}/")
+    print(f"\nEvaluation complete. Results in {RESULTS_DIR}/")
 
 
 if __name__ == "__main__":
