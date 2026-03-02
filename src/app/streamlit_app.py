@@ -347,7 +347,7 @@ def render_gauge(overall_conf: float):
 
 
 # ─────────────────────────────────────────────────────────────
-# Uncertainty map renderer
+# Certainty map renderer
 # ─────────────────────────────────────────────────────────────
 
 def render_uncertainty_map(uncertainty_map: dict):
@@ -485,7 +485,7 @@ def main():
             'font-family:\'Helvetica Neue\',sans-serif;margin:0 0 4px 0;">🌔 Penumbra</p>',
             unsafe_allow_html=True,
         )
-        st.caption("Uncertainty-aware language model")
+        st.caption("Certainty-aware language model")
         st.divider()
 
         # Page navigation
@@ -566,7 +566,7 @@ def main():
                 st.success(f"Loaded {len(questions_from_file)} questions")
                 if st.button("🔍 Run Batch Analysis", type="primary"):
                     predictor = get_predictor(use_local=use_local)
-                    st.subheader("📊 Batch Uncertainty Analysis")
+                    st.subheader("📊 Batch Certainty Analysis")
                     for i, q in enumerate(questions_from_file[:10]):
                         with st.expander(f"Q{i+1}: {q[:70]}"):
                             result = predictor.predict(q)
@@ -581,13 +581,13 @@ def main():
                                         unsafe_allow_html=True,
                                     )
                             else:
-                                st.error("Failed to parse uncertainty map")
+                                st.error("Failed to parse certainty map")
 
     # ── Header — title is a link that resets to home ──────────
     st.markdown(
         '<div style="text-align:center;">'
-        '  <a class="penumbra-title-link" href="/" style="display:inline-block;">🌔 Penumbra</a>'
-        '  <p class="penumbra-sub">Between knowing and guessing, there\'s a shadow.</p>'
+        '  <a class="penumbra-title-link" href="/" style="display:inline-block;">🌔Penumbra</a>'
+        '  <p class="penumbra-sub" style="text-align:center; margin-left:6.7em;">Between knowing and guessing, there\'s a shadow.</p>'
         '  <span class="penumbra-tagline">Know what to trust. Know what to question.</span>'
         '</div>',
         unsafe_allow_html=True,
@@ -625,12 +625,12 @@ Penumbra exists to fix that.
 
         about_block("🧠 How It Works", """
 <strong style="color:#c4b5fd;">1. Collect</strong> — Pulled TruthfulQA, TriviaQA, and FEVER: three benchmark datasets covering factual claims
-with known ground-truth labels, uncertainty levels, and contested areas.<br><br>
+with known ground-truth labels, certainty levels, and contested areas.<br><br>
 <strong style="color:#c4b5fd;">2. Annotate</strong> — Used Mistral Large 3 to decompose each answer into individual claims and assign a structured
-uncertainty map: confidence score, basis for that score, and alternative views where the evidence is contested.<br><br>
+certainty map: confidence score, basis for that score, and alternative views where the evidence is contested.<br><br>
 <strong style="color:#c4b5fd;">3. Generate</strong> — Synthesised additional QA pairs across high / medium / low certainty domains
-to balance the training distribution and expose the model to diverse uncertainty patterns.<br><br>
-<strong style="color:#c4b5fd;">4. Finetune</strong> — Trained Ministral 8B via QLoRA to always produce a structured JSON uncertainty map
+to balance the training distribution and expose the model to diverse certainty patterns.<br><br>
+<strong style="color:#c4b5fd;">4. Finetune</strong> — Trained Ministral 8B via QLoRA to always produce a structured JSON certainty map
 alongside every answer: claim-level confidence scores, reasoning basis, and flagged alternatives.<br><br>
 <strong style="color:#c4b5fd;">5. Demo</strong> — Side-by-side UI comparing the base model's confident prose against Penumbra's mapped output,
 so the before/after delta is immediately visible.
@@ -654,7 +654,7 @@ so the before/after delta is immediately visible.
 <br>
 <div style="background:rgba(234,179,8,0.1);border-left:3px solid #eab308;border-radius:6px;padding:10px 14px;margin-top:4px;font-size:0.92rem;color:#fde68a;">
   ⚡ <strong>This is a proof of concept trained on just 545 examples in under an hour on a consumer GPU.</strong>
-  The model already surfaces meaningful claim-level uncertainty. Imagine what a dataset 10× or 100× larger,
+  The model already surfaces meaningful claim-level certainty. Imagine what a dataset 10× or 100× larger,
   with more diverse domains and a longer training run, could achieve — calibrated epistemic transparency at scale.
 </div>
 """)
@@ -662,11 +662,11 @@ so the before/after delta is immediately visible.
         about_block("📈 Results &amp; Evaluation", """
 The core evaluation is a before/after comparison. Ask the same question to base Ministral 8B and Penumbra.
 The base model responds with uniformly confident prose — no signal about what it knows versus what it is guessing.
-Penumbra responds with a structured uncertainty map: each claim broken out with a confidence score,
+Penumbra responds with a structured certainty map: each claim broken out with a confidence score,
 the reasoning basis behind it, and flagged alternative views where the evidence is contested.
 <br><br>
 At 82.8% token accuracy with a final loss of 0.87, the model learned to reliably produce well-formed
-uncertainty maps. The most meaningful result is qualitative: claims the model should be uncertain about
+certainty maps. The most meaningful result is qualitative: claims the model should be uncertain about
 (contested causal chains, future predictions, incomplete evidence) consistently receive lower confidence
 scores than well-established facts — even with minimal training data.
 """)
@@ -676,7 +676,7 @@ scores than well-established facts — even with minimal training data.
   <div style="display:flex;gap:12px;"><span style="color:#7c3aed;font-size:1.1rem;">→</span><div><strong style="color:#e9d5ff;">For users:</strong> Know what to trust vs verify in any AI response before acting on it.</div></div>
   <div style="display:flex;gap:12px;"><span style="color:#7c3aed;font-size:1.1rem;">→</span><div><strong style="color:#e9d5ff;">For enterprises:</strong> Catch hallucinations before they cause damage in legal, medical, or financial workflows.</div></div>
   <div style="display:flex;gap:12px;"><span style="color:#7c3aed;font-size:1.1rem;">→</span><div><strong style="color:#e9d5ff;">For researchers:</strong> A ground-truth signal for epistemic calibration — does the model's stated confidence match its actual accuracy?</div></div>
-  <div style="display:flex;gap:12px;"><span style="color:#7c3aed;font-size:1.1rem;">→</span><div><strong style="color:#e9d5ff;">For AI safety:</strong> Transparency about model uncertainty is a prerequisite for trust. You cannot build reliable human-AI collaboration on a foundation of uniform confidence.</div></div>
+  <div style="display:flex;gap:12px;"><span style="color:#7c3aed;font-size:1.1rem;">→</span><div><strong style="color:#e9d5ff;">For AI safety:</strong> Transparency about model certainty is a prerequisite for trust. You cannot build reliable human-AI collaboration on a foundation of uniform confidence.</div></div>
 </div>
 """)
 
@@ -799,14 +799,14 @@ scores than well-established facts — even with minimal training data.
         if not st.session_state.penumbra_ready:
             with col_penumbra:
                 st.markdown("### 🌔 Penumbra")
-                st.caption("Uncertainty-aware — maps confidence claim by claim")
-                with st.spinner("Mapping uncertainty…"):
+                st.caption("Certainty-aware — maps confidence claim by claim")
+                with st.spinner("Mapping certainty…"):
                     uncertainty_map = predictor.predict(question)
                 st.session_state.uncertainty_map = uncertainty_map
                 st.session_state.penumbra_ready  = True
             with col_base:
                 st.markdown("### 🤖 Base Ministral 8B")
-                st.caption("Standard — no uncertainty awareness")
+                st.caption("Standard — no certainty awareness")
                 st.info("⏳ Loading base response…")
             st.rerun()
 
@@ -814,11 +814,11 @@ scores than well-established facts — even with minimal training data.
         elif not st.session_state.base_ready:
             with col_penumbra:
                 st.markdown("### 🌔 Penumbra")
-                st.caption("Uncertainty-aware — maps confidence claim by claim")
+                st.caption("Certainty-aware — maps confidence claim by claim")
                 render_uncertainty_map(st.session_state.uncertainty_map)
             with col_base:
                 st.markdown("### 🤖 Base Ministral 8B")
-                st.caption("Standard — no uncertainty awareness")
+                st.caption("Standard — no certainty awareness")
                 with st.spinner("Generating base response…"):
                     base_response = predictor.get_base_response(question)
                 st.session_state.base_response = base_response
@@ -829,12 +829,12 @@ scores than well-established facts — even with minimal training data.
         else:
             with col_penumbra:
                 st.markdown("### 🌔 Penumbra")
-                st.caption("Uncertainty-aware — maps confidence claim by claim")
+                st.caption("Certainty-aware — maps confidence claim by claim")
                 render_uncertainty_map(st.session_state.uncertainty_map)
 
             with col_base:
                 st.markdown("### 🤖 Base Ministral 8B")
-                st.caption("Standard — no uncertainty awareness")
+                st.caption("Standard — no certainty awareness")
                 st.markdown(
                     f'<div class="base-panel">{st.session_state.base_response}</div>',
                     unsafe_allow_html=True,
