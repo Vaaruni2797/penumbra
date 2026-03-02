@@ -7,6 +7,7 @@ Finetuned Ministral 8B to produce structured **uncertainty maps** alongside ever
 ---
 
 🌐 **Live Demo:** https://penumbra-ynafj2aazjsy9bpdtrn8a5.streamlit.app/
+
 ## 🎯 The Problem
 
 Every AI model outputs answers with the same confident tone — whether it's certain or guessing.
@@ -16,9 +17,9 @@ Every AI model outputs answers with the same confident tone — whether it's cer
 *Everything sounds equally certain. Nothing tells you what to trust.*
 
 **Penumbra:**
-- Subprime lending as trigger: 🟣 95% confident (overwhelming evidence)
-- Deregulation as direct cause: 🔵 61% confident (economists debate causality vs correlation)
-- CDOs as primary mechanism: 🔵 73% confident (strong evidence, alternatives exist)
+- Subprime lending as trigger: 🟡 95% confident (overwhelming evidence)
+- Deregulation as direct cause: 🟣 61% confident (economists debate causality vs correlation)
+- CDOs as primary mechanism: 🟣 73% confident (strong evidence, alternatives exist)
 
 *Now you know exactly what to trust and what to verify.*
 
@@ -128,26 +129,11 @@ streamlit run src/app/streamlit_app.py
 
 ---
 
-## 🖥️ Demo UI
+## 📈 Evaluation
 
-The Streamlit app shows a side-by-side comparison:
+The key signal: **before/after comparison**.
 
-| Penumbra (left) | Base Ministral 8B (right) |
-|---|---|
-| Overall confidence gauge | Standard prose response |
-| Epistemic summary | No uncertainty signal |
-| Answer | Confident tone regardless of certainty |
-| Weakest claim highlighted | |
-| Confidence bar chart (dark purple → yellow) | |
-| Claim-by-claim breakdown with color-coded confidence | |
-| Stats strip: claims analyzed, avg confidence, uncertain claims | |
-
-**Confidence color scale:** ⚫ dark purple = low confidence → 🟣 purple = medium → 🟡 yellow = high confidence
-
-**Sidebar features:**
-- Toggle local model vs API mode
-- W&B training run link
-- Upload `.txt` or `.jsonl` file for batch analysis (up to 10 questions)
+Ask the same question to base Ministral 8B and Penumbra. Base model responds with uniformly confident prose. Penumbra responds with a structured JSON uncertainty map — claim-level confidence scores, basis for each claim, and alternative views where uncertainty is high.
 
 ---
 
@@ -193,8 +179,5 @@ penumbra/
 
 ---
 
-Built for the Mistral Hackathon 2026. 🌒
-
----
-
+Built for the Mistral Hackathon 2026. 🌔
 **Team:** nofreelunch &nbsp;·&nbsp; **Author:** Vaaruni Desai
