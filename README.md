@@ -6,6 +6,7 @@ Finetuned Ministral 8B to produce structured **uncertainty maps** alongside ever
 
 ---
 
+🌐 **Live Demo:** https://penumbra-ynafj2aazjsy9bpdtrn8a5.streamlit.app/
 ## 🎯 The Problem
 
 Every AI model outputs answers with the same confident tone — whether it's certain or guessing.
@@ -197,5 +198,3 @@ Built for the Mistral Hackathon 2026. 🌒
 ---
 
 **Team:** nofreelunch &nbsp;·&nbsp; **Author:** Vaaruni Desai
-
-🌐 **Live Demo:** https://penumbra-ynafj2aazjsy9bpdtrn8a5.streamlit.app/
