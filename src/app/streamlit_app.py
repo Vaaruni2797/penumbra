@@ -459,6 +459,8 @@ def render_uncertainty_map(uncertainty_map: dict):
 def main():
 
     demo_questions = [
+        "Was Thanos's idea valid?",
+        "Does a universal basic income improve humanity in the long run?",
         "What caused the 2008 financial crisis?",
         "Is coffee good or bad for your health?",
         "What will AI look like in 2030?",
@@ -609,7 +611,7 @@ def main():
             )
 
         st.markdown(
-            '<div style="text-align:center;margin-bottom:28px;"><p style="font-size:2.2rem;font-weight:900;color:#ffffff;font-family:Helvetica Neue,sans-serif;margin:0;">ℹ️ About Penumbra</p><p style="font-size:1rem;color:#a78bfa;margin-top:6px;font-style:italic;">Built for the Mistral Hackathon 2026</p></div>',
+            '<div style="text-align:center;margin-bottom:28px;"><p style="font-size:2.2rem;font-weight:900;color:#ffffff;font-family:Helvetica Neue,sans-serif;margin:0;">ℹ️ About Penumbra</p><p style="font-size:1rem;color:#a78bfa;margin-top:6px;font-style:italic;">Built for the Mistral Hackathon 2026<br>By Vaaruni from team nofreelunch</p></div>',
             unsafe_allow_html=True,
         )
 
